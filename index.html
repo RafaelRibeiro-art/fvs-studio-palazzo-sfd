@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>FVS Studio · Palazzo Silvia Fonseca Diniz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --teal-900:#0b423f; --teal-800:#0f5c56; --teal-700:#136e67; --teal-600:#16a394; --teal-500:#1ec2b0;
+    --teal-100:#e6f4f2; --teal-050:#f4fbfa; --ink:#0d201e; --paper:#fbfdfc; --line:#d7e6e3; --muted:#5b746f;
+    --st-empty:#dfe7e5; --st-review:#e3a713; --st-ok:#1f9d63; --st-fail:#d93f3f; --st-reopen:#e07a2c; --st-void:#3a4746;
+    --tipo-obrigatoria:#d93f3f; --tipo-condicional:#e3a713; --tipo-recomendada:#2f7fd1;
+    --radius:14px; --shadow:0 8px 24px -12px rgba(11,66,63,0.28);
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{ background:radial-gradient(1200px 600px at 100% -10%, rgba(30,194,176,0.10), transparent 60%), var(--teal-050);
+    color:var(--ink); font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; padding-bottom:64px; }
+  h1,h2,h3,.display{ font-family:'Space Grotesk',system-ui,sans-serif; letter-spacing:-0.01em; }
+  .mono{ font-family:'JetBrains Mono',monospace; }
+
+  header.top{ background:linear-gradient(135deg,var(--teal-900) 0%,var(--teal-700) 55%,var(--teal-600) 100%); color:#fff;
+    padding:26px 20px 22px; position:relative; overflow:hidden; }
+  header.top::after{ content:""; position:absolute; inset:0;
+    background-image:repeating-conic-gradient(from 0deg at 92% 18%, rgba(255,255,255,0.07) 0deg 6deg, transparent 6deg 18deg);
+    -webkit-mask-image:radial-gradient(120px 120px at 92% 18%, black, transparent 70%);
+    mask-image:radial-gradient(120px 120px at 92% 18%, black, transparent 70%); pointer-events:none; }
+  .brand-row{ display:flex; align-items:center; gap:14px; position:relative; z-index:1; }
+  .ray-mark{ width:46px; height:46px; flex:none; }
+  .brand-text .eyebrow{ font-size:11px; letter-spacing:0.16em; text-transform:uppercase; opacity:0.82; font-weight:600; margin:0 0 2px; }
+  .brand-text h1{ font-size:21px; margin:0; line-height:1.15; font-weight:700; }
+  .brand-text .sub{ font-size:12.5px; opacity:0.85; margin-top:3px; }
+  .principle{ margin-top:18px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.18); border-radius:12px;
+    padding:11px 14px; font-size:13px; line-height:1.45; position:relative; z-index:1; }
+  .principle b{ font-weight:700; }
+  .src-note{ margin-top:8px; font-size:10.5px; opacity:0.75; position:relative; z-index:1; }
+
+  .wizard{ padding:14px 16px 4px; }
+  .row-label{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+    margin:14px 0 7px; display:flex; align-items:center; justify-content:space-between; }
+  .row-label:first-child{ margin-top:0; }
+  .row-label .step-n{ display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%;
+    background:var(--teal-700); color:#fff; font-size:9.5px; margin-right:6px; }
+
+  .disc-row{ display:flex; gap:8px; }
+  .disc-btn{ flex:1; padding:12px 10px; border-radius:12px; border:1.5px solid var(--line); background:#fff; cursor:pointer;
+    font-size:13px; font-weight:700; color:var(--muted); text-align:center; }
+  .disc-btn.active.inst{ background:var(--teal-700); border-color:var(--teal-700); color:#fff; }
+  .disc-btn.active.civ{ background:#5a4a2f; border-color:#5a4a2f; color:#fff; }
+
+  .chiprow{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .chiprow::-webkit-scrollbar{display:none;}
+  .chip{ flex:none; padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--teal-800);
+    font-size:12.5px; font-weight:600; cursor:pointer; white-space:nowrap; transition:all .15s ease; }
+  .chip.active{ background:var(--teal-700); border-color:var(--teal-700); color:#fff; box-shadow:var(--shadow); }
+  .chip.add{ background:#fff; border:1.5px dashed var(--teal-500); color:var(--teal-700); }
+
+  .gchip{ flex:none; padding:5px 11px; border-radius:7px; font-size:11px; font-weight:700; background:#fff;
+    border:1px solid var(--line); color:var(--muted); cursor:pointer; white-space:nowrap; }
+  .gchip.active{ background:var(--teal-800); border-color:var(--teal-800); color:#fff; }
+  .gchip.add{ border:1.5px dashed var(--teal-500); color:var(--teal-700); }
+
+  .empty-hint{ font-size:11.5px; color:var(--muted); font-style:italic; padding:4px 2px; }
+
+  .view-toggle{ display:flex; gap:6px; padding:14px 16px 10px; }
+  .vt-btn{ padding:7px 14px; border-radius:8px; font-size:12.5px; font-weight:700; border:1px solid var(--line);
+    background:#fff; color:var(--teal-800); cursor:pointer; }
+  .vt-btn.active{ background:var(--teal-600); border-color:var(--teal-600); color:#fff; }
+
+  .searchwrap{ padding:0 16px 14px; }
+  .searchbox{ display:flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:9px 12px; }
+  .searchbox input{ border:none; outline:none; font-size:13.5px; width:100%; font-family:'Inter',sans-serif; color:var(--ink); background:transparent; }
+  .searchbox svg{ flex:none; opacity:0.5; }
+
+  main{ padding:0 16px; }
+  .panel{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 0 rgba(11,66,63,0.03); }
+  .panel-head{ padding:14px 16px 10px; border-bottom:1px solid var(--line); }
+  .panel-head .row1{ display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+  .panel-head h2{ font-size:14.5px; margin:0; color:var(--teal-900); line-height:1.4; }
+  .panel-head .meta{ font-size:11.5px; color:var(--muted); white-space:nowrap; }
+  .previsto-badge{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:var(--teal-700);
+    background:var(--teal-100); padding:3px 9px; border-radius:999px; margin-top:8px; }
+  .custom-badge{ display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; color:#8a5c0a;
+    background:#fef8ec; padding:2px 8px; border-radius:999px; margin-left:6px; border:1px solid #f3e2b8; }
+
+  .prereq-row{ margin-top:9px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:11.5px; color:var(--muted); }
+  .prereq-chip{ display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:999px; font-size:11px; font-weight:700; color:#fff; }
+  .prereq-chip.tipo-obrigatoria{ background:var(--tipo-obrigatoria); }
+  .prereq-chip.tipo-condicional{ background:var(--tipo-condicional); }
+  .prereq-chip.tipo-recomendada{ background:var(--tipo-recomendada); }
+
+  .matrix-scroll{ overflow-x:auto; }
+  table.matrix{ border-collapse:collapse; width:100%; min-width:560px; }
+  table.matrix th, table.matrix td{ padding:0; }
+  table.matrix thead th{ background:var(--teal-050); color:var(--teal-900); font-size:11.5px; text-transform:uppercase;
+    letter-spacing:0.04em; font-weight:700; padding:10px 10px; border-bottom:1px solid var(--line); text-align:center; white-space:nowrap; }
+  table.matrix thead th:first-child{ text-align:left; }
+  table.matrix tbody th{ text-align:left; padding:11px 12px; font-size:13px; font-weight:600; color:var(--ink);
+    border-bottom:1px solid var(--line); background:#fff; white-space:nowrap; position:sticky; left:0; }
+  table.matrix tbody tr:nth-child(even) th{ background:#fbfdfc; }
+  table.matrix tbody th .gate-icon{ margin-right:5px; }
+  table.matrix td{ border-bottom:1px solid var(--line); border-left:1px solid var(--line); text-align:center; vertical-align:middle; }
+  .cell{ width:100%; height:100%; min-height:52px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    border:none; background:none; padding:10px 6px; }
+  .dot{ width:15px; height:15px; border-radius:50%; display:inline-block; box-shadow:inset 0 0 0 1.5px rgba(0,0,0,0.06); }
+  .dot.empty{ background:var(--st-empty); } .dot.review{ background:var(--st-review); } .dot.ok{ background:var(--st-ok); }
+  .dot.fail{ background:var(--st-fail); } .dot.reopen{ background:var(--st-reopen); } .dot.void{ background:var(--st-void); }
+  .cell:hover .dot{ transform:scale(1.15); transition:transform .1s ease; }
+  .cell .badge-count{ position:relative; top:-9px; left:11px; font-size:9px; font-weight:700; background:var(--teal-800);
+    color:#fff; border-radius:999px; padding:0 4px; line-height:14px; min-width:14px; }
+  .row-blocked th{ background:#fdf2f2 !important; } .row-alert th{ background:#fef8ec !important; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:12px; padding:12px 16px; font-size:11.5px; color:var(--muted); }
+  .legend span{ display:inline-flex; align-items:center; gap:5px; } .legend .dot{ width:9px; height:9px; }
+  .empty-state{ padding:36px 20px; text-align:center; color:var(--muted); font-size:13px; }
+  .empty-state .glyph{ font-size:26px; display:block; margin-bottom:6px; }
+  .placeholder-note{ padding:10px 16px; font-size:11px; color:var(--muted); background:#fffaf0; border-top:1px dashed #f0dcc0; border-bottom:1px dashed #f0dcc0; }
+
+  .lote-body{ padding:14px 16px 6px; }
+  .lote-hint{ font-size:12px; color:var(--muted); margin-bottom:12px; line-height:1.5; }
+  .lote-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+  .lote-item{ display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:#fff; }
+  .lote-item.blocked{ background:#fdf2f2; border-color:#f2cccc; } .lote-item.alert{ background:#fef8ec; border-color:#f3e2b8; }
+  .lote-item input[type=checkbox]{ width:17px; height:17px; accent-color:var(--teal-700); flex:none; }
+  .lote-item .li-name{ font-size:13px; font-weight:600; flex:1; }
+  .lote-item .li-status{ font-size:11px; font-weight:700; }
+  .lote-item .li-status.blocked{ color:var(--tipo-obrigatoria); } .lote-item .li-status.alert{ color:#a3730a; } .lote-item .li-status.ok{ color:var(--st-ok); }
+  .lote-item .li-motivo{ font-size:10.5px; color:var(--muted); display:block; margin-top:2px; }
+  .lote-actions{ display:flex; gap:8px; margin-bottom:10px; }
+  .lote-actions button{ flex:1; padding:8px; border-radius:8px; border:1px solid var(--line); background:#fff; font-size:11.5px; font-weight:700; color:var(--teal-800); cursor:pointer; }
+  .lote-form{ border:1.5px dashed var(--teal-500); border-radius:12px; padding:14px; background:var(--teal-050); margin-bottom:16px; }
+  .lote-result{ font-size:12px; } .lote-result .lr-line{ padding:4px 0; border-bottom:1px dashed var(--line); }
+
+  .overlay{ position:fixed; inset:0; background:rgba(11,32,30,0.55); display:none; align-items:flex-end; justify-content:center;
+    z-index:50; backdrop-filter:blur(2px); }
+  .overlay.show{ display:flex; }
+  .sheet{ background:var(--paper); width:100%; max-width:520px; border-radius:20px 20px 0 0; max-height:88vh; overflow-y:auto;
+    box-shadow:0 -10px 40px rgba(0,0,0,0.25); animation:slideup .22s ease; }
+  @keyframes slideup{ from{ transform:translateY(24px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+  .sheet-head{ padding:18px 18px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--paper); z-index:2; }
+  .sheet-head .path{ font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+  .sheet-head h3{ margin:4px 0 0; font-size:17px; color:var(--teal-900); }
+  .sheet-close{ position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%; border:none;
+    background:var(--teal-100); color:var(--teal-800); font-size:16px; cursor:pointer; }
+  .sheet-body{ padding:16px 18px 22px; }
+  .sheet-section-label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:18px 0 10px; }
+  .sheet-section-label:first-child{ margin-top:0; }
+  .gate-banner{ border-radius:12px; padding:12px 13px; font-size:12.5px; line-height:1.5; margin-bottom:16px; display:flex; gap:9px; align-items:flex-start; }
+  .gate-banner .gi{ font-size:16px; line-height:1; }
+  .gate-banner.blocked{ background:#fdf2f2; border:1px solid #f2cccc; color:#8a2323; }
+  .gate-banner.alert{ background:#fef8ec; border:1px solid #f3e2b8; color:#8a5c0a; }
+  .gate-banner b{ font-weight:700; }
+
+  .trail{ position:relative; padding-left:26px; }
+  .trail::before{ content:""; position:absolute; left:8px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--teal-600), var(--line)); }
+  .record{ position:relative; margin-bottom:14px; padding:12px 13px; border-radius:12px; border:1px solid var(--line); background:#fff; }
+  .record::before{ content:""; position:absolute; left:-22px; top:16px; width:11px; height:11px; border-radius:50%;
+    background:var(--dotcolor,var(--st-empty)); box-shadow:0 0 0 4px var(--paper); }
+  .record.is-void{ background:#f4f5f5; opacity:0.75; }
+  .record.is-void .record-title, .record.is-void .record-meta{ text-decoration:line-through; text-decoration-color:#98a3a1; }
+  .record-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .record-title{ font-size:13.5px; font-weight:700; }
+  .status-pill{ font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:999px; color:#fff; white-space:nowrap; }
+  .record-meta{ font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.5; }
+  .record-reason{ margin-top:7px; font-size:12px; background:#fff5ea; color:#8a4a13; border:1px solid #f0dcc0; border-radius:8px; padding:6px 9px; }
+  .record-pendencia{ margin-top:7px; font-size:11px; font-weight:700; color:#8a2323; background:#fdf2f2; border:1px solid #f2cccc; border-radius:8px; padding:5px 9px; }
+
+  .dep-list{ display:flex; flex-wrap:wrap; gap:7px; }
+  .dep-chip{ font-size:11px; font-weight:600; padding:5px 10px; border-radius:8px; display:inline-flex; align-items:center; gap:5px;
+    border:1px solid var(--line); background:#fff; }
+  .dep-chip.ok{ color:var(--st-ok); border-color:#bfe4d3; background:#f1faf5; }
+  .dep-chip.blocked{ color:var(--tipo-obrigatoria); border-color:#f2cccc; background:#fdf2f2; }
+  .dep-chip.alert{ color:#a3730a; border-color:#f3e2b8; background:#fef8ec; }
+
+  .new-record{ border:1.5px dashed var(--teal-500); border-radius:12px; padding:14px; background:var(--teal-050); }
+  .new-record.locked{ opacity:0.5; pointer-events:none; }
+  .field{ margin-bottom:11px; }
+  .field label{ display:block; font-size:11.5px; font-weight:600; color:var(--teal-900); margin-bottom:5px; }
+  .field input, .field select, .field textarea{ width:100%; padding:9px 10px; border-radius:8px; border:1px solid var(--line);
+    font-size:13px; font-family:'Inter',sans-serif; background:#fff; color:var(--ink); }
+  .checkfield{ display:flex; align-items:center; gap:8px; font-size:12px; color:#8a2323; font-weight:600; margin-bottom:11px; }
+  .checkfield input{ width:16px; height:16px; accent-color:var(--tipo-obrigatoria); }
+  .status-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .status-opt{ display:flex; flex-direction:column; align-items:center; gap:5px; padding:9px 4px; border-radius:10px;
+    border:1.5px solid var(--line); background:#fff; cursor:pointer; font-size:11px; font-weight:600; color:var(--muted); text-align:center; }
+  .status-opt .dot{ width:13px; height:13px; }
+  .status-opt.selected{ border-color:var(--teal-600); background:var(--teal-100); color:var(--teal-900); }
+  .reason-field{ display:none; } .reason-field.show{ display:block; }
+  .btn-primary{ width:100%; padding:12px; border:none; border-radius:10px; background:var(--teal-700); color:#fff; font-weight:700;
+    font-size:13.5px; cursor:pointer; margin-top:4px; }
+  .btn-primary:disabled{ opacity:0.5; cursor:not-allowed; }
+  .btn-secondary{ width:100%; padding:11px; border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--teal-800);
+    font-weight:700; font-size:13px; cursor:pointer; margin-top:8px; }
+  .hint{ font-size:11px; color:var(--muted); margin-top:8px; text-align:center; line-height:1.5; }
+  footer.note{ text-align:center; font-size:11px; color:var(--muted); padding:26px 20px 6px; line-height:1.6; }
+
+  .tsgrid{ display:flex; gap:8px; flex-wrap:wrap; }
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand-row">
+    <svg class="ray-mark" viewBox="0 0 100 100" fill="none">
+      <g stroke="#fff" stroke-width="6" stroke-linecap="round">
+        <line x1="50" y1="50" x2="50" y2="6"/>
+        <line x1="50" y1="50" x2="78" y2="14" stroke-width="5"/>
+        <line x1="50" y1="50" x2="90" y2="32" stroke-width="4.5"/>
+        <line x1="50" y1="50" x2="94" y2="50" stroke-width="4"/>
+        <line x1="50" y1="50" x2="90" y2="68" stroke-width="4.5"/>
+        <line x1="50" y1="50" x2="78" y2="86" stroke-width="5"/>
+        <line x1="50" y1="50" x2="50" y2="94" stroke-width="6"/>
+        <line x1="50" y1="50" x2="22" y2="86" stroke-width="5"/>
+        <line x1="50" y1="50" x2="10" y2="68" stroke-width="4.5"/>
+        <line x1="50" y1="50" x2="6" y2="50" stroke-width="4"/>
+        <line x1="50" y1="50" x2="10" y2="32" stroke-width="4.5"/>
+        <line x1="50" y1="50" x2="22" y2="14" stroke-width="5"/>
+      </g>
+    </svg>
+    <div class="brand-text">
+      <p class="eyebrow">StudyOS · Palazzo Silvia Fonseca Diniz</p>
+      <h1>FVS Studio</h1>
+      <p class="sub">Obra → Disciplina → Local → Coluna → Ambiente → Tipo de Serviço → Pacote</p>
+    </div>
+  </div>
+  <div class="principle">
+    <b>Nenhuma verificação desaparece.</b> Toda alteração deixa rastros. Um serviço só libera o próximo quando estiver 100% Conforme — sem isso, fica bloqueado.
+  </div>
+  <div class="src-note">Base cruzada com o cronograma real da obra (141 pacotes · 57 locais · colunas reais por pavimento). Tudo abaixo pode ser editado ou expandido por você.</div>
+</header>
+
+<div class="wizard">
+  <div class="row-label"><span><span class="step-n">1</span>Disciplina</span></div>
+  <div class="disc-row" id="discRow"></div>
+
+  <div class="row-label"><span><span class="step-n">2</span>Local</span></div>
+  <div class="chiprow" id="grupoRow" style="margin-bottom:8px"></div>
+  <div class="chiprow" id="pavTabs"></div>
+
+  <div id="colunaBlock" style="display:none">
+    <div class="row-label"><span><span class="step-n">3</span>Coluna</span></div>
+    <div class="chiprow" id="colunaRow"></div>
+  </div>
+
+  <div class="row-label"><span><span class="step-n">4</span>Ambiente</span></div>
+  <div class="chiprow" id="ambienteRow"></div>
+
+  <div class="row-label"><span><span class="step-n">5</span>Tipo de Serviço</span></div>
+  <div class="chiprow" id="tipoServicoRow"></div>
+
+  <div class="row-label"><span><span class="step-n">6</span>Pacote</span></div>
+  <div class="chiprow" id="serviceTabs"></div>
+</div>
+
+<div class="view-toggle" id="viewToggle">
+  <button class="vt-btn active" data-view="matriz">▦ Matriz</button>
+  <button class="vt-btn" data-view="lote">⚡ Modo em lote</button>
+</div>
+<div class="searchwrap" id="searchWrap">
+  <div class="searchbox">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="searchInput" placeholder="Buscar ambiente, item ou responsável...">
+  </div>
+</div>
+
+<main>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="row1">
+        <h2 id="panelTitle">—</h2>
+        <span class="meta" id="panelMeta">—</span>
+      </div>
+      <div id="previstoBadgeWrap"></div>
+      <div class="prereq-row" id="prereqRow"></div>
+    </div>
+
+    <div id="matrizView">
+      <div id="placeholderNote" class="placeholder-note" style="display:none">
+        Este local ainda não tem os ambientes reais cadastrados — usando "Área Geral" como placeholder. Use "+ Novo ambiente" pra detalhar.
+      </div>
+      <div class="matrix-scroll">
+        <table class="matrix" id="matrixTable"></table>
+      </div>
+      <div id="emptyState" style="display:none"></div>
+      <div class="legend">
+        <span><i class="dot empty"></i>Não preenchida</span>
+        <span><i class="dot review"></i>Em inspeção</span>
+        <span><i class="dot ok"></i>Conforme</span>
+        <span><i class="dot fail"></i>Não conforme</span>
+        <span><i class="dot reopen"></i>Reinspeção</span>
+        <span>🔒 Bloqueado por pré-requisito</span>
+        <span>⚠️ Liberado com alerta</span>
+      </div>
+    </div>
+
+    <div id="loteView" style="display:none">
+      <div class="lote-body">
+        <p class="lote-hint">Selecione as frentes/ambientes deste local para verificar a liberação do pacote <b id="loteServName">—</b> de uma vez. Bloqueios são individuais — uma frente com pendência não trava as outras.</p>
+        <div class="lote-actions">
+          <button id="loteSelAll">Selecionar liberados</button>
+          <button id="loteSelNone">Limpar seleção</button>
+        </div>
+        <div class="lote-list" id="loteList"></div>
+        <div class="lote-form" id="loteForm">
+          <div class="sheet-section-label" style="margin-top:0">Registrar em lote (<span id="loteCount">0</span> selecionadas)</div>
+          <div class="field">
+            <label>Resultado</label>
+            <div class="status-grid" id="loteStatusGrid"></div>
+          </div>
+          <div class="field">
+            <label>Responsável</label>
+            <input id="loteResponsavel" placeholder="Nome de quem está verificando">
+          </div>
+          <button class="btn-primary" id="loteSave" disabled>Registrar nas frentes selecionadas</button>
+          <p class="hint">Frentes bloqueadas são ignoradas automaticamente, mesmo se marcadas.</p>
+        </div>
+        <div class="sheet-section-label">Resultado do último lote</div>
+        <div class="lote-result" id="loteResult">Nenhum lote registrado ainda nesta sessão.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="note">
+  Esboço v4 · seleção em cascata + colunas reais + tudo editável (locais, ambientes e pacotes).<br>
+  Salvo neste aparelho — sem sincronização entre pessoas ainda.
+</footer>
+
+<!-- FICHA -->
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <button class="sheet-close" id="closeSheet">✕</button>
+      <div class="path" id="sheetPath">Local · Ambiente</div>
+      <h3 id="sheetTitle">Item de verificação</h3>
+    </div>
+    <div class="sheet-body">
+      <div id="gateBanner"></div>
+      <div class="sheet-section-label">Trilha de rastreabilidade</div>
+      <div class="trail" id="trail"></div>
+      <div class="sheet-section-label">Novo registro</div>
+      <div class="new-record" id="newRecordBox">
+        <div class="field">
+          <label>Resultado</label>
+          <div class="status-grid" id="statusGrid"></div>
+        </div>
+        <div class="field">
+          <label>Responsável</label>
+          <input id="fResponsavel" placeholder="Nome de quem está preenchendo">
+        </div>
+        <div class="field reason-field" id="reasonWrap">
+          <label id="reasonLabel">Motivo (reabertura / invalidação)</label>
+          <textarea id="fMotivo" rows="2" placeholder="Ex.: item executado incorretamente, refazer instalação"></textarea>
+        </div>
+        <label class="checkfield">
+          <input type="checkbox" id="fPendencia"> Marcar como pendência impeditiva (bloqueia pacotes que dependem deste)
+        </label>
+        <button class="btn-primary" id="saveRecord" disabled>Registrar verificação</button>
+        <p class="hint">O registro anterior (se existir) é preservado e marcado como invalidado — nada é apagado.</p>
+      </div>
+      <div id="depsWrap" style="display:none">
+        <div class="sheet-section-label">Libera automaticamente</div>
+        <div class="dep-list" id="depsList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADICIONAR (local / ambiente / pacote) -->
+<div class="overlay" id="addOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <button class="sheet-close" id="closeAdd">✕</button>
+      <div class="path" id="addPath">Adicionar</div>
+      <h3 id="addTitle">Novo item</h3>
+    </div>
+    <div class="sheet-body" id="addBody"></div>
+  </div>
+</div>
+
+<script>
+const REAL_DATA = {"pavimentos": [{"id": "casa-de-lixo", "nome": "Casa de Lixo", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "fachada-etapa-1", "nome": "Fachada - Etapa 1", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "fachada-etapa-2", "nome": "Fachada - Etapa 2", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "fachada-etapa-3", "nome": "Fachada - Etapa 3", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "fachada-etapa-4", "nome": "Fachada - Etapa 4", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "garagem-g1", "nome": "Garagem - G1", "grupo": "Garagens", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "garagem-g2", "nome": "Garagem - G2", "grupo": "Garagens", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "garagem-g3", "nome": "Garagem - G3", "grupo": "Garagens", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "infra-urbanizacao-e-infraestrutura", "nome": "Infra - Urbanização e Infraestrutura", "grupo": "Infraestrutura Externa", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "infraestrutra-externa", "nome": "Infraestrutra Externa", "grupo": "Infraestrutura Externa", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "muro-do-condominio", "nome": "Muro do Condomínio", "grupo": "Infraestrutura Externa", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "reservatorio-inferior", "nome": "Reservatório Inferior", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "reservatorio-superior", "nome": "Reservatório Superior", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "sala-de-bombas", "nome": "Sala de Bombas", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "sala-de-medidores", "nome": "Sala de Medidores", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "sala-de-pressurizacao", "nome": "Sala de Pressurização", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "sala-do-gerador", "nome": "Sala do Gerador", "grupo": "Áreas Técnicas", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "servicos-provisorios", "nome": "Serviços Provisórios", "grupo": "Canteiro", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "ts-10o-pav", "nome": "TS - 10º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 10, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-11o-pav", "nome": "TS - 11º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 11, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-12o-pav", "nome": "TS - 12º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 12, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-13o-pav", "nome": "TS - 13º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 13, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-14o-pav", "nome": "TS - 14º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 14, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-15o-pav", "nome": "TS - 15º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 15, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-16o-pav-rooftop", "nome": "TS - 16º Pav. - ROOFTOP", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 16, "colunas": ["05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-3o-pav-g3", "nome": "TS - 3º Pav. (G3)", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 3, "colunas": ["02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-4o-pav", "nome": "TS - 4º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 4, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-5o-pav", "nome": "TS - 5º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 5, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-6o-pav", "nome": "TS - 6º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 6, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-7o-pav", "nome": "TS - 7º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 7, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-8o-pav", "nome": "TS - 8º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 8, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-9o-pav", "nome": "TS - 9º Pav.", "grupo": "Torres - Pavimento Tipo", "ambientes": [], "andar": 9, "colunas": ["01", "02", "03", "04", "05", "06", "07"], "baseAmbientes": ["Sala", "Quarto 01", "Quarto 02", "Cozinha"]}, {"id": "ts-cobertura", "nome": "TS - Cobertura", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "ts-escada", "nome": "TS - Escada", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "ts-fachada-do-cremalheira-1", "nome": "TS - Fachada do cremalheira 1", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "ts-fachada-do-cremalheira-2", "nome": "TS - Fachada do cremalheira 2", "grupo": "Fachada e Estruturas Especiais", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-adm", "nome": "Uso Comum - ADM", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-academia", "nome": "Uso Comum - Academia", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-bicicletario", "nome": "Uso Comum - Bicicletário", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-brinquedoteca", "nome": "Uso Comum - Brinquedoteca", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-cine-jogos", "nome": "Uso Comum - Cine/Jogos", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-confraria-fire", "nome": "Uso Comum - Confraria/FIRE", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-coworking", "nome": "Uso Comum - Coworking", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-deck-superior", "nome": "Uso Comum - Deck Superior", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-espaco-cafe", "nome": "Uso Comum - Espaço Café", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-guarita-delivery", "nome": "Uso Comum - Guarita/Delivery", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-jardim-open", "nome": "Uso Comum - Jardim Open", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-lounge-piscina", "nome": "Uso Comum - Lounge Piscina", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-massagem-bem-estar", "nome": "Uso Comum - Massagem/Bem-Estar", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-pet-place", "nome": "Uso Comum - Pet Place", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-piscina-hidro", "nome": "Uso Comum - Piscina/Hidro", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-playground-pet-play", "nome": "Uso Comum - Playground/Pet Play", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-quadra", "nome": "Uso Comum - Quadra", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-recepcao-lobby", "nome": "Uso Comum - Recepção/Lobby", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-salao-de-festas", "nome": "Uso Comum - Salão de Festas", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-sauna", "nome": "Uso Comum - Sauna", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}, {"id": "uso-comum-minimercado-lounge", "nome": "Uso comum - Minimercado/Lounge", "grupo": "Áreas de Uso Comum", "ambientes": ["Área Geral (a detalhar)"], "colunas": [], "baseAmbientes": []}], "grupos_order": ["Torres - Pavimento Tipo", "Áreas de Uso Comum", "Garagens", "Áreas Técnicas", "Infraestrutura Externa", "Fachada e Estruturas Especiais", "Canteiro"], "servicos": [{"id": "aele-acabamentos-eletricos", "nome": "AELE - Acabamentos elétricos", "area": "instalacoes", "itens": ["Tomadas", "Interruptores", "Luminárias"], "prereqs": [{"servId": "enfi-enfiacao", "tipo": "obrigatoria"}], "tipoServico": "Elétrica"}, {"id": "afin-acabamentos-finos", "nome": "AFIN - Acabamentos Finos", "area": "civil", "itens": ["Limpeza"], "tipoServico": "Outros — Civil"}, {"id": "alac-alvenaria-areas-comuns", "nome": "ALAC- Alvenaria Áreas Comuns", "area": "civil", "itens": ["Elevação", "Marcação com 1a Fiada", "Marcação dos Eixos das Paredes"], "tipoServico": "Alvenaria/Vedação"}, {"id": "albr-alambrado", "nome": "ALBR - Alambrado", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "alve-alvenaria", "nome": "ALVE - Alvenaria", "area": "civil", "itens": ["Aperto", "Elevação", "Elevação da Alvenaria", "Locação dos Eixos das Paredes", "Marcação com 1a Fiada", "Marcação da 1a Fiada", "Marcação dos Eixos", "Marcação dos Eixos das Paredes"], "tipoServico": "Alvenaria/Vedação"}, {"id": "aper-aperto-em-alvenaria", "nome": "APER - Aperto em Alvenaria", "area": "civil", "itens": ["Execução"], "tipoServico": "Alvenaria/Vedação"}, {"id": "arra-arrasamento-de-estacas", "nome": "ARRA - Arrasamento de Estacas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "baac-bancadas-areas-comuns", "nome": "BAAC - Bancadas Áreas Comuns", "area": "civil", "itens": ["Alvenaria", "Bancada"], "tipoServico": "Outros — Civil"}, {"id": "banc-bancadas", "nome": "BANC - Bancadas", "area": "civil", "itens": ["Bancadas", "Mão Francesa"], "tipoServico": "Outros — Civil"}, {"id": "beac-benfeitorias-areas-comuns", "nome": "BEAC - Benfeitorias Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "bndj-bandeja-de-seguranca", "nome": "BNDJ - Bandeja de Segurança", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "bomb-bombas", "nome": "BOMB - Bombas", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Outros — Instalações"}, {"id": "cama-camada-impermeabilizadora", "nome": "CAMA - Camada Impermeabilizadora", "area": "civil", "itens": ["Execução"], "tipoServico": "Impermeabilização"}, {"id": "cant-canteiro-definitivo", "nome": "CANT - Canteiro Definitivo", "area": "civil", "itens": ["Execução"], "tipoServico": "Canteiro/Provisórios"}, {"id": "ceac-ceramica-areas-comuns", "nome": "CEAC - Cerâmica Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "cera-ceramica", "nome": "CERA - Cerâmica", "area": "civil", "itens": ["Filetes e Soleiras", "Parede", "Piso"], "tipoServico": "Revestimento/Acabamento"}, {"id": "cerh-ceramica-hall", "nome": "CERH - Cerâmica Hall", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "cerv-ceramica-das-varandas", "nome": "CERV - Cerâmica das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "chap-chapisco", "nome": "CHAP - Chapisco", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "chap-chapisco-da-periferia", "nome": "CHAP - Chapisco da Periferia", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "chex-chapisco-externo", "nome": "CHEX - Chapisco Externo", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "chva-chapisco-das-varandas", "nome": "CHVA - Chapisco das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "coac-contrapiso-areas-comuns", "nome": "COAC - Contrapiso Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "cobe-cobertura", "nome": "COBE - Cobertura", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "coin-contencoes-internas", "nome": "COIN - Contenções Internas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "comp-complementacao", "nome": "COMP - Complementação", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "conm-contramarco", "nome": "CONM - Contramarco", "area": "civil", "itens": ["Chumbamento", "Linhas de Eixo", "Posicionamento Contramarco"], "tipoServico": "Outros — Civil"}, {"id": "corr-corrimao", "nome": "CORR - Corrimão", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "cpan-contrapiso-autonivelante", "nome": "CPAN - Contrapiso Autonivelante", "area": "civil", "itens": ["Execução Contrapiso", "Limpeza", "Regularização de Piso"], "tipoServico": "Revestimento/Acabamento"}, {"id": "cpea-contrapiso-ensacado", "nome": "CPEA - Contrapiso Ensacado", "area": "civil", "itens": ["Execução do Contrapiso", "Mestras"], "tipoServico": "Revestimento/Acabamento"}, {"id": "desp-despesas", "nome": "DESP - Despesas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "devg-demarcacao-de-vagas-de-garagem", "nome": "DEVG - Demarcação de vagas de garagem", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "drya-drywall-areas-comuns", "nome": "DRYA - Drywall Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Drywall"}, {"id": "dryh-drywall-hall", "nome": "DRYH - Drywall Hall", "area": "civil", "itens": ["Emassamento", "Estrutura", "Fechamento"], "tipoServico": "Drywall"}, {"id": "dryw-drywall", "nome": "DRYW - Drywall", "area": "civil", "itens": ["Estrutura", "Fechamento", "Marcação"], "tipoServico": "Drywall"}, {"id": "edry-estrutura-drywall", "nome": "EDRY - Estrutura Drywall", "area": "civil", "itens": ["Estrutura", "1ª Etapa Fechamento"], "tipoServico": "Drywall"}, {"id": "ele1-elevador-provisorio1", "nome": "ELE1 - Elevador Provisório1", "area": "civil", "itens": ["Fundação da base", "Montagem do Elevador"], "tipoServico": "Canteiro/Provisórios"}, {"id": "ele2-elevador-provisorio2", "nome": "ELE2 - Elevador Provisório2", "area": "civil", "itens": ["Fundação da base", "Montagem do Elevador"], "tipoServico": "Canteiro/Provisórios"}, {"id": "eltt-aereo-instalacoes-eletricas-e-telefonicas", "nome": "ELTT - Aéreo Instalações Elétricas e Telefónicas", "area": "instalacoes", "itens": ["Tubulação", "Caixas de Passagem", "Fiação Aérea"], "prereqs": [{"servId": "edry-estrutura-drywall", "tipo": "obrigatoria"}], "tipoServico": "Elétrica"}, {"id": "emac-emboco-areas-comuns", "nome": "EMAC - Emboço Áreas Comuns", "area": "civil", "itens": ["Chapisco", "Emboço", "Emobço", "Reboco"], "tipoServico": "Revestimento/Acabamento"}, {"id": "emah-emassamento-hall", "nome": "EMAH - Emassamento Hall", "area": "civil", "itens": ["Lixamento", "Massa Corrida", "Selador"], "tipoServico": "Revestimento/Acabamento"}, {"id": "emas-emassamento", "nome": "EMAS - Emassamento", "area": "civil", "itens": ["Lixamento", "Massa Corrida", "Massa corrida", "Selador"], "tipoServico": "Revestimento/Acabamento"}, {"id": "embh-emboco-do-hall", "nome": "EMBH - Emboço do Hall", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "embo-emboco", "nome": "EMBO - Emboço", "area": "civil", "itens": ["Chapisco", "Emboço", "Execução", "Mestras"], "tipoServico": "Revestimento/Acabamento"}, {"id": "embp-emboco-da-periferia", "nome": "EMBP - Emboço da Periferia", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "embv-emboco-das-varandas", "nome": "EMBV - Emboço das Varandas", "area": "civil", "itens": ["Emboço", "Mestras"], "tipoServico": "Revestimento/Acabamento"}, {"id": "emer-material-de-emergencia", "nome": "EMER - Material de emergência", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "emex-emboco-externo", "nome": "EMEX - Emboço Externo", "area": "civil", "itens": ["Emboço", "Mestra"], "tipoServico": "Revestimento/Acabamento"}, {"id": "enfi-enfiacao", "nome": "ENFI - Enfiação", "area": "instalacoes", "itens": ["enfiação", "Enfiação do Hall", "Teste Elétrico"], "prereqs": [{"servId": "fdry-fechamento-drywall", "tipo": "obrigatoria"}], "tipoServico": "Elétrica"}, {"id": "eqac-esquadrias-areas-comuns", "nome": "EQAC - Esquadrias Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Esquadrias"}, {"id": "esca-escavacoes-e-movimento-de-terra", "nome": "ESCA - Escavações e Movimento de terra", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "ese1-elevador-de-servico", "nome": "ESE1 - Elevador de Serviço", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "ese2-elevador-de-servico", "nome": "ESE2 - Elevador de Serviço", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "eshe-estacas-helice", "nome": "ESHE - Estacas Hélice", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "eso1-elevador-social", "nome": "ESO1 - Elevador Social", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "eso2-elevador-social", "nome": "ESO2 - Elevador Social", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "esqu-esquadrias", "nome": "ESQU - Esquadrias", "area": "civil", "itens": ["Execução"], "tipoServico": "Esquadrias"}, {"id": "estj-estacas-justapostas", "nome": "ESTJ - Estacas Justapostas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "estr-estrutura", "nome": "ESTR - Estrutura", "area": "civil", "itens": ["Armadura - Laje e Vigas", "Armadura - Pilares", "Concretagem - Laje e Vigas", "Concretagem - Pilares", "Forma - Laje e Vigas", "Forma - Pilares"], "tipoServico": "Estrutura"}, {"id": "fdry-fechamento-drywall", "nome": "FDRY - Fechamento Drywall", "area": "civil", "itens": ["Chapeamento", "Emassamento"], "prereqs": [{"servId": "eltt-aereo-instalacoes-eletricas-e-telefonicas", "tipo": "obrigatoria"}, {"servId": "inss-instalacoes-sanitarias-embutidas", "tipo": "obrigatoria"}, {"servId": "inhi-instacoes-hidraulicas-embutidas", "tipo": "obrigatoria"}], "tipoServico": "Drywall"}, {"id": "finz-finalizacao-dos-apartamentos", "nome": "FINZ - Finalização dos Apartamentos", "area": "civil", "itens": ["Revisão Geral", "Revisão da Cerâmica", "Revisão da Pintura", "Revisão do Forro", "Revisão do Rejunte"], "tipoServico": "Outros — Civil"}, {"id": "foac-forros-areas-comuns", "nome": "FOAC - Forros Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "fobr-finalizacao-obra", "nome": "FOBR - Finalização Obra", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "forh-forros-hall", "nome": "FORH - Forros Hall", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "forr-forros-e-sancas", "nome": "FORR - Forros e Sancas", "area": "civil", "itens": ["Emassamento", "Execução", "Fitamento", "Mestra"], "tipoServico": "Revestimento/Acabamento"}, {"id": "forv-forro-das-varandas", "nome": "FORV - Forro das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "gaba-gabarito", "nome": "GABA- Gabarito", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "gpac-guarda-corpo-areas-comuns", "nome": "GPAC - Guarda Corpo Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "grua-mini-grua", "nome": "GRUA - Mini-Grua", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "guco-guarda-corpo", "nome": "GUCO - Guarda Corpo", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "gas", "nome": "GÁS", "area": "instalacoes", "itens": ["Tubulação e Conectores", "Teste de Estanqueidade"], "tipoServico": "Gás"}, {"id": "hall-finalizacao-do-hall", "nome": "HALL - Finalização do Hall", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "hitt-aereo-instalacoes-hidrossanitarias", "nome": "HITT - Aéreo instalações Hidrossanitárias", "area": "instalacoes", "itens": ["Tubulação", "Conexões"], "prereqs": [{"servId": "edry-estrutura-drywall", "tipo": "obrigatoria"}], "tipoServico": "Hidráulica"}, {"id": "imac-impermeabilizacao-areas-comuns", "nome": "IMAC - Impermeabilização Áreas Comuns", "area": "civil", "itens": ["Impermeabilização", "Regularização", "Regulazição", "Teste de Eestanqueidade", "Teste de Estanqueidade", "Teste de estanqueidade"], "tipoServico": "Impermeabilização"}, {"id": "imcp-impermeabilizacao-do-caixao-da-piscina", "nome": "IMCP - Impermeabilização do Caixão da Piscina", "area": "civil", "itens": ["Execução", "Preparo do Caixão", "Teste de Estanqueidade"], "tipoServico": "Impermeabilização"}, {"id": "impe-impermeabilizacao", "nome": "IMPE - Impermeabilização", "area": "civil", "itens": ["Impermeabilização", "Preparo da superficie", "Regularização", "Teste Estanqueidade", "Teste de Estanqueidade"], "tipoServico": "Impermeabilização"}, {"id": "ineq-instalacao-de-equipamento", "nome": "INEQ - Instalação de Equipamento", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Outros — Instalações"}, {"id": "inhi-instacoes-hidraulicas-embutidas", "nome": "INHI - Instações Hidráulicas Embutidas", "area": "instalacoes", "itens": ["Instalações hidráulicas", "Climatização"], "prereqs": [{"servId": "hitt-aereo-instalacoes-hidrossanitarias", "tipo": "obrigatoria"}], "tipoServico": "Hidráulica"}, {"id": "inse-instalacoes-eletricas", "nome": "INSE - Instalações Elétricas", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Elétrica"}, {"id": "insh-instalacoes-hidraulicas", "nome": "INSH - Instalações Hidráulicas", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Hidráulica"}, {"id": "inss-instalacoes-sanitarias-embutidas", "nome": "INSS - Instalações Sanitárias Embutidas", "area": "instalacoes", "itens": ["Ramais de Esgoto", "Conexões"], "prereqs": [{"servId": "hitt-aereo-instalacoes-hidrossanitarias", "tipo": "obrigatoria"}], "tipoServico": "Sanitária"}, {"id": "inst-instalacoes", "nome": "INST - Instalações", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Outros — Instalações"}, {"id": "limp-limpeza-da-fachada", "nome": "LIMP - Limpeza da Fachada", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "loac-loucas-areas-comuns", "nome": "LOAC - Louças Áreas Comuns", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Louças e Metais"}, {"id": "louc-loucas", "nome": "LOUÇ - Louças", "area": "instalacoes", "itens": ["Vaso Sanitário", "Lavatório", "Fixação"], "prereqs": [{"servId": "reju-rejunte", "tipo": "obrigatoria"}], "tipoServico": "Louças e Metais"}, {"id": "mbal-montagem-balancim", "nome": "MBAL - Montagem Balancim", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "meta-metais", "nome": "META - Metais", "area": "instalacoes", "itens": ["Torneiras", "Registros", "Acabamentos"], "prereqs": [{"servId": "louc-loucas", "tipo": "obrigatoria"}], "tipoServico": "Louças e Metais"}, {"id": "moan-montagem-de-andaimes", "nome": "MOAN - Montagem de Andaimes", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "p1ha-pintura-1a-demao-hall", "nome": "P1HA - Pintura 1ª Demão Hall", "area": "civil", "itens": ["1a demão", "Lixamento"], "tipoServico": "Pintura"}, {"id": "p2ha-pintura-2a-demao-hall", "nome": "P2HA - Pintura 2ª Demão Hall", "area": "civil", "itens": ["Execução"], "tipoServico": "Pintura"}, {"id": "paig-paisagismo", "nome": "PAIG - Paisagismo", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "pavi-pavimentacao", "nome": "PAVI - Pavimentação", "area": "civil", "itens": ["Concretagem 1a camada", "Preparação da Base"], "tipoServico": "Outros — Civil"}, {"id": "perg-pergolado", "nome": "PERG - Pergolado", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "piac-pintura-areas-comuns", "nome": "PIAC - Pintura Áreas Comuns", "area": "civil", "itens": ["Emassamento", "Pintura", "Preparo p/ pintura", "Preparo pra pintura"], "tipoServico": "Pintura"}, {"id": "pin1-pintura-1a-demao", "nome": "PIN1 - Pintura 1ª demão", "area": "civil", "itens": ["1a demão", "Lixamento"], "tipoServico": "Pintura"}, {"id": "pin2-pintura-2a-demao", "nome": "PIN2 - Pintura 2ª demão", "area": "civil", "itens": ["2a demão", "Retoques Finais"], "tipoServico": "Pintura"}, {"id": "pocf-porta-corta-fogo", "nome": "POCF - Porta Corta Fogo", "area": "civil", "itens": ["Execução"], "tipoServico": "Esquadrias"}, {"id": "poli-polimento-do-piso", "nome": "POLI - Polimento do Piso", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "pord-portas-de-madeira", "nome": "PORD - Portas de Madeira", "area": "civil", "itens": ["Fechadura", "Maçaneta", "Maçanetas", "Porta", "Portas"], "tipoServico": "Esquadrias"}, {"id": "prca-prova-de-carga", "nome": "PRCA - Prova de Carga", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "prel-prumada-eletrica", "nome": "PREL - Prumada Elétrica", "area": "instalacoes", "itens": ["Cabos", "Conexões"], "tipoServico": "Elétrica"}, {"id": "prgc-pre-guarda-corpo", "nome": "PRGC - Pré Guarda-Corpo", "area": "civil", "itens": ["Chapim", "Chumbador", "Furo"], "tipoServico": "Outros — Civil"}, {"id": "prim-preparo-para-impermeabilizacao", "nome": "PRIM - Preparo para Impermeabilização", "area": "civil", "itens": ["Execução"], "tipoServico": "Impermeabilização"}, {"id": "prin-prumadas-de-incendio", "nome": "PRIN - Prumadas de Incêndio", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Incêndio"}, {"id": "prov-canteiro-provisorio", "nome": "PROV - Canteiro Provisório", "area": "civil", "itens": ["Execução"], "tipoServico": "Canteiro/Provisórios"}, {"id": "prug-prumadas-de-gas", "nome": "PRUG - Prumadas de Gás", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Gás"}, {"id": "pruh-prumadas-de-agua-do-hall", "nome": "PRUH - Prumadas de Água do Hall", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Hidráulica"}, {"id": "qdap-montagem-do-quadro-eletrico", "nome": "QDAP - Montagem do Quadro Elétrico", "area": "instalacoes", "itens": ["Chumbamento", "Disjuntores", "Identificação"], "prereqs": [{"servId": "prel-prumada-eletrica", "tipo": "obrigatoria"}], "tipoServico": "Elétrica"}, {"id": "qdmd-quadro-de-medicao", "nome": "QDMD - Quadro de Medição", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Elétrica"}, {"id": "ragu-rede-de-agua", "nome": "RAGU - Rede de Água", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Hidráulica"}, {"id": "rdre-rede-de-drenagem", "nome": "RDRE - Rede de Drenagem", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Sanitária"}, {"id": "rede-redes-embutidas", "nome": "REDE - Redes Embutidas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "reex-rejunte-externo", "nome": "REEX - Rejunte Externo", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "regi-regularizacao-interna", "nome": "REGI - Regularização Interna", "area": "civil", "itens": ["Regularização de Parede", "Regularização de Paredes"], "tipoServico": "Outros — Civil"}, {"id": "regt-regularizacao-de-teto", "nome": "REGT - Regularização de Teto", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "rejh-rejunte-hall", "nome": "REJH - Rejunte Hall", "area": "civil", "itens": ["Limpeza", "Proteção", "Proteção de Piso", "Rejuntamento", "Rejunte"], "tipoServico": "Revestimento/Acabamento"}, {"id": "rejp-rejunte-da-periferia", "nome": "REJP - Rejunte da Periferia", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "reju-rejunte", "nome": "REJU - Rejunte", "area": "civil", "itens": ["Limpeza", "Rejunte", "Proteção de piso"], "tipoServico": "Revestimento/Acabamento"}, {"id": "rejv-rejunte-das-varandas", "nome": "REJV - Rejunte das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "rel1-retirada-elevador-provisorio1", "nome": "REL1 - Retirada Elevador Provisório1", "area": "civil", "itens": ["Execução"], "tipoServico": "Canteiro/Provisórios"}, {"id": "rel2-retirada-elevador-provisorio2", "nome": "REL2 - Retirada Elevador Provisório2", "area": "civil", "itens": ["Execução"], "tipoServico": "Canteiro/Provisórios"}, {"id": "rele-rede-eletrica", "nome": "RELE - Rede Elétrica", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Elétrica"}, {"id": "resg-rede-de-esgoto", "nome": "RESG - Rede de Esgoto", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Sanitária"}, {"id": "reva-revestimento-das-varandas", "nome": "REVA - Revestimento das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "reve-revestimento-externo", "nome": "REVE - Revestimento Externo", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "revp-revestimento-da-periferia", "nome": "REVP - Revestimento da Periferia", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "rgex-regularizacao-externa", "nome": "RGEX - Regularização Externa", "area": "civil", "itens": ["Calafetação", "Lagartixa", "Limpeza"], "tipoServico": "Outros — Civil"}, {"id": "rgpf-regularizacao-da-periferia", "nome": "RGPF - Regularização da Periferia", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "rgas-rede-de-gas", "nome": "RGÁS - Rede de Gás", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Gás"}, {"id": "rinc-rede-de-incendio", "nome": "RINC - Rede de Incêndio", "area": "instalacoes", "itens": ["Execução"], "tipoServico": "Incêndio"}, {"id": "rjac-rejunte-areas-comuns", "nome": "RJAC - Rejunte Áreas Comuns", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "roda-rodape", "nome": "RODA - Rodapé", "area": "civil", "itens": ["Execução"], "tipoServico": "Revestimento/Acabamento"}, {"id": "rvan-regularizacao-das-varandas", "nome": "RVAN - Regularização das Varandas", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "sela-selante", "nome": "SELA - Selante", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "slqa-tela-slqa", "nome": "SLQA - Tela SLQA", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "tela-tela-da-fachada", "nome": "TELA - Tela da Fachada", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "tpo1-tratamento-de-poco-1", "nome": "TPO1 - Tratamento de Poço 1", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "tpo2-tratamento-de-poco-2", "nome": "TPO2 - Tratamento de Poço 2", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "tpo3-tratamento-de-poco-3", "nome": "TPO3 - Tratamento de Poço 3", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "tpo4-tratamento-de-poco-4", "nome": "TPO4 - Tratamento de Poço 4", "area": "civil", "itens": ["Execução"], "tipoServico": "Outros — Civil"}, {"id": "vigb-vigas-e-blocos", "nome": "VIGB - Vigas e Blocos", "area": "civil", "itens": ["Execução"], "tipoServico": "Estrutura"}], "previsto": {"ts-3o-pav-g3": {"edry-estrutura-drywall": "18/11/2026", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "25/11/2026", "hitt-aereo-instalacoes-hidrossanitarias": "25/11/2026", "inss-instalacoes-sanitarias-embutidas": "27/11/2026", "inhi-instacoes-hidraulicas-embutidas": "27/11/2026", "fdry-fechamento-drywall": "16/12/2026", "gas": "27/01/2027", "reju-rejunte": "04/05/2027", "enfi-enfiacao": "19/05/2027", "aele-acabamentos-eletricos": "05/08/2027", "louc-loucas": "05/08/2027", "meta-metais": "23/09/2027", "prel-prumada-eletrica": "25/04/2028", "qdap-montagem-do-quadro-eletrico": "26/04/2028"}, "ts-4o-pav": {"edry-estrutura-drywall": "07/12/2026", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "14/12/2026", "hitt-aereo-instalacoes-hidrossanitarias": "14/12/2026", "inss-instalacoes-sanitarias-embutidas": "16/12/2026", "inhi-instacoes-hidraulicas-embutidas": "16/12/2026", "fdry-fechamento-drywall": "15/01/2027", "gas": "15/02/2027", "reju-rejunte": "20/05/2027", "enfi-enfiacao": "07/06/2027", "aele-acabamentos-eletricos": "23/08/2027", "louc-loucas": "23/08/2027", "meta-metais": "11/10/2027", "prel-prumada-eletrica": "24/04/2028", "qdap-montagem-do-quadro-eletrico": "25/04/2028"}, "ts-5o-pav": {"edry-estrutura-drywall": "07/01/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "13/01/2027", "hitt-aereo-instalacoes-hidrossanitarias": "13/01/2027", "inss-instalacoes-sanitarias-embutidas": "15/01/2027", "inhi-instacoes-hidraulicas-embutidas": "15/01/2027", "fdry-fechamento-drywall": "02/02/2027", "gas": "03/03/2027", "reju-rejunte": "08/06/2027", "enfi-enfiacao": "23/06/2027", "aele-acabamentos-eletricos": "09/09/2027", "louc-loucas": "09/09/2027", "meta-metais": "28/10/2027", "prel-prumada-eletrica": "20/04/2028", "qdap-montagem-do-quadro-eletrico": "24/04/2028"}, "ts-6o-pav": {"edry-estrutura-drywall": "25/01/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "29/01/2027", "hitt-aereo-instalacoes-hidrossanitarias": "29/01/2027", "inss-instalacoes-sanitarias-embutidas": "02/02/2027", "inhi-instacoes-hidraulicas-embutidas": "02/02/2027", "fdry-fechamento-drywall": "19/02/2027", "gas": "22/03/2027", "reju-rejunte": "25/06/2027", "enfi-enfiacao": "13/07/2027", "aele-acabamentos-eletricos": "27/09/2027", "louc-loucas": "27/09/2027", "meta-metais": "17/11/2027", "prel-prumada-eletrica": "19/04/2028", "qdap-montagem-do-quadro-eletrico": "20/04/2028"}, "ts-7o-pav": {"edry-estrutura-drywall": "11/02/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "17/02/2027", "hitt-aereo-instalacoes-hidrossanitarias": "17/02/2027", "inss-instalacoes-sanitarias-embutidas": "19/02/2027", "inhi-instacoes-hidraulicas-embutidas": "19/02/2027", "fdry-fechamento-drywall": "09/03/2027", "gas": "08/04/2027", "reju-rejunte": "14/07/2027", "enfi-enfiacao": "29/07/2027", "aele-acabamentos-eletricos": "14/10/2027", "louc-loucas": "14/10/2027", "meta-metais": "03/12/2027", "prel-prumada-eletrica": "18/04/2028", "qdap-montagem-do-quadro-eletrico": "19/04/2028"}, "ts-8o-pav": {"edry-estrutura-drywall": "01/03/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "05/03/2027", "hitt-aereo-instalacoes-hidrossanitarias": "05/03/2027", "inss-instalacoes-sanitarias-embutidas": "09/03/2027", "inhi-instacoes-hidraulicas-embutidas": "09/03/2027", "fdry-fechamento-drywall": "29/03/2027", "gas": "27/04/2027", "reju-rejunte": "30/07/2027", "enfi-enfiacao": "16/08/2027", "aele-acabamentos-eletricos": "01/11/2027", "louc-loucas": "01/11/2027", "meta-metais": "05/01/2028", "prel-prumada-eletrica": "17/04/2028", "qdap-montagem-do-quadro-eletrico": "18/04/2028"}, "ts-9o-pav": {"edry-estrutura-drywall": "18/03/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "24/03/2027", "hitt-aereo-instalacoes-hidrossanitarias": "24/03/2027", "inss-instalacoes-sanitarias-embutidas": "29/03/2027", "inhi-instacoes-hidraulicas-embutidas": "29/03/2027", "fdry-fechamento-drywall": "14/04/2027", "gas": "13/05/2027", "reju-rejunte": "17/08/2027", "enfi-enfiacao": "01/09/2027", "aele-acabamentos-eletricos": "19/11/2027", "louc-loucas": "19/11/2027", "meta-metais": "21/01/2028", "prel-prumada-eletrica": "13/04/2028", "qdap-montagem-do-quadro-eletrico": "17/04/2028"}, "ts-10o-pav": {"edry-estrutura-drywall": "06/04/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "12/04/2027", "hitt-aereo-instalacoes-hidrossanitarias": "12/04/2027", "inss-instalacoes-sanitarias-embutidas": "14/04/2027", "inhi-instacoes-hidraulicas-embutidas": "14/04/2027", "fdry-fechamento-drywall": "03/05/2027", "gas": "01/06/2027", "reju-rejunte": "02/09/2027", "enfi-enfiacao": "20/09/2027", "aele-acabamentos-eletricos": "07/12/2027", "louc-loucas": "07/12/2027", "meta-metais": "08/02/2028", "prel-prumada-eletrica": "12/04/2028", "qdap-montagem-do-quadro-eletrico": "13/04/2028"}, "ts-11o-pav": {"edry-estrutura-drywall": "23/04/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "29/04/2027", "hitt-aereo-instalacoes-hidrossanitarias": "29/04/2027", "inss-instalacoes-sanitarias-embutidas": "03/05/2027", "inhi-instacoes-hidraulicas-embutidas": "03/05/2027", "fdry-fechamento-drywall": "19/05/2027", "gas": "17/06/2027", "reju-rejunte": "21/09/2027", "enfi-enfiacao": "06/10/2027", "aele-acabamentos-eletricos": "07/01/2028", "louc-loucas": "07/01/2028", "meta-metais": "24/02/2028", "prel-prumada-eletrica": "11/04/2028", "qdap-montagem-do-quadro-eletrico": "12/04/2028"}, "ts-12o-pav": {"edry-estrutura-drywall": "11/05/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "17/05/2027", "hitt-aereo-instalacoes-hidrossanitarias": "17/05/2027", "inss-instalacoes-sanitarias-embutidas": "19/05/2027", "inhi-instacoes-hidraulicas-embutidas": "19/05/2027", "fdry-fechamento-drywall": "07/06/2027", "gas": "06/07/2027", "reju-rejunte": "07/10/2027", "enfi-enfiacao": "25/10/2027", "aele-acabamentos-eletricos": "25/01/2028", "louc-loucas": "25/01/2028", "meta-metais": "14/03/2028", "prel-prumada-eletrica": "10/04/2028", "qdap-montagem-do-quadro-eletrico": "11/04/2028"}, "ts-13o-pav": {"edry-estrutura-drywall": "28/05/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "03/06/2027", "hitt-aereo-instalacoes-hidrossanitarias": "03/06/2027", "inss-instalacoes-sanitarias-embutidas": "07/06/2027", "inhi-instacoes-hidraulicas-embutidas": "07/06/2027", "fdry-fechamento-drywall": "23/06/2027", "gas": "23/07/2027", "reju-rejunte": "26/10/2027", "enfi-enfiacao": "11/11/2027", "aele-acabamentos-eletricos": "10/02/2028", "louc-loucas": "10/02/2028", "meta-metais": "31/03/2028", "prel-prumada-eletrica": "07/04/2028", "qdap-montagem-do-quadro-eletrico": "10/04/2028"}, "ts-14o-pav": {"edry-estrutura-drywall": "15/06/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "21/06/2027", "hitt-aereo-instalacoes-hidrossanitarias": "21/06/2027", "inss-instalacoes-sanitarias-embutidas": "23/06/2027", "inhi-instacoes-hidraulicas-embutidas": "23/06/2027", "fdry-fechamento-drywall": "13/07/2027", "gas": "10/08/2027", "reju-rejunte": "12/11/2027", "enfi-enfiacao": "30/11/2027", "aele-acabamentos-eletricos": "28/02/2028", "louc-loucas": "28/02/2028", "prel-prumada-eletrica": "06/04/2028", "qdap-montagem-do-quadro-eletrico": "07/04/2028", "meta-metais": "19/04/2028"}, "ts-15o-pav": {"edry-estrutura-drywall": "02/07/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "09/07/2027", "hitt-aereo-instalacoes-hidrossanitarias": "09/07/2027", "inss-instalacoes-sanitarias-embutidas": "13/07/2027", "inhi-instacoes-hidraulicas-embutidas": "13/07/2027", "fdry-fechamento-drywall": "29/07/2027", "gas": "26/08/2027", "reju-rejunte": "01/12/2027", "enfi-enfiacao": "17/12/2027", "aele-acabamentos-eletricos": "16/03/2028", "louc-loucas": "16/03/2028", "prel-prumada-eletrica": "05/04/2028", "qdap-montagem-do-quadro-eletrico": "06/04/2028", "meta-metais": "09/05/2028"}, "ts-16o-pav-rooftop": {"edry-estrutura-drywall": "21/07/2027", "eltt-aereo-instalacoes-eletricas-e-telefonicas": "27/07/2027", "hitt-aereo-instalacoes-hidrossanitarias": "27/07/2027", "inss-instalacoes-sanitarias-embutidas": "29/07/2027", "inhi-instacoes-hidraulicas-embutidas": "29/07/2027", "fdry-fechamento-drywall": "16/08/2027", "gas": "13/09/2027", "reju-rejunte": "17/12/2027", "enfi-enfiacao": "13/01/2028", "aele-acabamentos-eletricos": "04/04/2028", "louc-loucas": "04/04/2028", "prel-prumada-eletrica": "04/04/2028", "qdap-montagem-do-quadro-eletrico": "06/04/2028", "meta-metais": "25/05/2028"}}};
+
+const STATUS = {
+  empty:  {label:'Não preenchida', color:'var(--st-empty)',  pill:'#9aa8a5'},
+  review: {label:'Em inspeção',    color:'var(--st-review)', pill:'#e3a713'},
+  ok:     {label:'Conforme',       color:'var(--st-ok)',     pill:'#1f9d63'},
+  fail:   {label:'Não conforme',   color:'var(--st-fail)',   pill:'#d93f3f'},
+  reopen: {label:'Reinspeção',     color:'var(--st-reopen)', pill:'#e07a2c'},
+};
+const TIPO_LABEL = {obrigatoria:'Obrigatória', condicional:'Condicional', recomendada:'Recomendada'};
+const DATA_KEY = 'fvs_palazzo_sfd_v4';
+const TORRE_GRUPO = 'Torres - Pavimento Tipo';
+
+function slugify(s){
+  return s.toString().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+}
+
+function seedData(){
+  const db = { pavimentos: REAL_DATA.pavimentos, servicos: REAL_DATA.servicos, previsto: REAL_DATA.previsto, registros: {} };
+  const p = 'ts-5o-pav';
+  db.registros[p] = {
+    'edry-estrutura-drywall': {
+      'Apto 503 — Sala': { 'Estrutura':[{status:'ok',responsavel:'Equipe Civil',data:'20/08/2026',hora:'08:10'}], '1ª Etapa Fechamento':[{status:'ok',responsavel:'Equipe Civil',data:'22/08/2026',hora:'15:40'}] },
+      'Apto 503 — Quarto 01': { 'Estrutura':[{status:'ok',responsavel:'Equipe Civil',data:'20/08/2026',hora:'08:20'}], '1ª Etapa Fechamento':[] },
+      'Apto 503 — Quarto 02': { 'Estrutura':[], '1ª Etapa Fechamento':[] },
+      'Apto 503 — Cozinha': { 'Estrutura':[], '1ª Etapa Fechamento':[] },
+      'Apto 504 — Sala': { 'Estrutura':[], '1ª Etapa Fechamento':[] },
+      'Apto 504 — Quarto 01': { 'Estrutura':[], '1ª Etapa Fechamento':[] },
+    },
+    'hitt-aereo-instalacoes-hidrossanitarias': {
+      'Apto 503 — Sala': { 'Tubulação':[{status:'ok',responsavel:'Marcos',data:'23/08/2026',hora:'10:00'}], 'Conexões':[{status:'ok',responsavel:'Marcos',data:'23/08/2026',hora:'10:20'}] },
+      'Apto 503 — Quarto 02': { 'Tubulação':[{status:'ok',responsavel:'Marcos',data:'23/08/2026',hora:'11:00'}], 'Conexões':[{status:'ok',responsavel:'Marcos',data:'23/08/2026',hora:'11:10',pendenciaImpeditiva:true,motivo:'Falta 1 conexão — item comprado mas não instalado'}] },
+    },
+    'louc-loucas': {
+      'Apto 503 — Cozinha': { 'Vaso Sanitário':[{status:'ok',responsavel:'João',data:'24/08/2026',hora:'09:00'}], 'Lavatório':[{status:'ok',responsavel:'João',data:'24/08/2026',hora:'09:10'}], 'Fixação':[{status:'ok',responsavel:'João',data:'24/08/2026',hora:'09:15'}] },
+    },
+    'prel-prumada-eletrica': {
+      'Apto 504 — Sala': { 'Cabos':[{status:'ok',responsavel:'Carlos',data:'25/08/2026',hora:'13:00'}], 'Conexões':[{status:'ok',responsavel:'Carlos',data:'25/08/2026',hora:'13:20'}] },
+    }
+  };
+  return db;
+}
+function loadData(){
+  try{ const raw = localStorage.getItem(DATA_KEY); if(raw) return JSON.parse(raw); }catch(e){}
+  const seeded = seedData();
+  localStorage.setItem(DATA_KEY, JSON.stringify(seeded));
+  return seeded;
+}
+function saveData(){ localStorage.setItem(DATA_KEY, JSON.stringify(DB)); }
+
+let DB = loadData();
+const firstPav = DB.pavimentos.find(p=>p.grupo===TORRE_GRUPO) || DB.pavimentos[0];
+let state = {
+  disciplina: 'instalacoes',
+  grupo: firstPav.grupo,
+  pavId: firstPav.id,
+  coluna: null,
+  ambienteFiltro: null,
+  tipoServico: null,
+  servId: null,
+  view: 'matriz',
+  cell: null,
+  selectedStatus: null,
+  gating: {estado:'liberado'},
+  lote: { selected:new Set() }
+};
+
+function getPav(id){ return DB.pavimentos.find(p=>p.id===id); }
+function getServ(id){ return DB.servicos.find(s=>s.id===id); }
+function pavsInGrupo(g){ return DB.pavimentos.filter(p=>p.grupo===g); }
+function servicosDaDisciplina(){ return DB.servicos.filter(s=>s.area===state.disciplina); }
+function tiposServicoDaDisciplina(){
+  return [...new Set(servicosDaDisciplina().map(s=>s.tipoServico))].sort();
+}
+function servicosFiltrados(){
+  let list = servicosDaDisciplina();
+  if(state.tipoServico) list = list.filter(s=>s.tipoServico===state.tipoServico);
+  return list;
+}
+function pickDefaultServId(){
+  const list = servicosFiltrados();
+  return list.length ? list[0].id : null;
+}
+
+function aptoLabel(pav, coluna, room){
+  const num = pav.andar*100 + parseInt(coluna,10);
+  return `Apto ${num} — ${room}`;
+}
+function ambientesDoPav(pav, coluna){
+  if(pav.grupo===TORRE_GRUPO){
+    const cols = coluna ? [coluna] : pav.colunas;
+    const out = [];
+    cols.forEach(c=> pav.baseAmbientes.forEach(a=> out.push(aptoLabel(pav,c,a))));
+    return out;
+  }
+  return pav.ambientes;
+}
+function roomTypesDoPav(pav){ return pav.grupo===TORRE_GRUPO ? pav.baseAmbientes : pav.ambientes; }
+function ambientesFiltrados(){
+  const pav = getPav(state.pavId);
+  let list = ambientesDoPav(pav, state.coluna);
+  if(state.ambienteFiltro){
+    if(pav.grupo===TORRE_GRUPO) list = list.filter(a=>a.endsWith('— '+state.ambienteFiltro));
+    else list = list.filter(a=>a===state.ambienteFiltro);
+  }
+  return list;
+}
+
+function ensurePath(pavId, servId, ambiente, item){
+  DB.registros[pavId] = DB.registros[pavId] || {};
+  DB.registros[pavId][servId] = DB.registros[pavId][servId] || {};
+  DB.registros[pavId][servId][ambiente] = DB.registros[pavId][servId][ambiente] || {};
+  DB.registros[pavId][servId][ambiente][item] = DB.registros[pavId][servId][ambiente][item] || [];
+  return DB.registros[pavId][servId][ambiente][item];
+}
+function cellRecords(pavId, servId, ambiente, item){ return (((DB.registros[pavId]||{})[servId]||{})[ambiente]||{})[item] || []; }
+function activeRecord(records){ for(let i=records.length-1;i>=0;i--){ if(!records[i].void) return records[i]; } return null; }
+function cellDotClass(records){ const active = activeRecord(records); if(!active) return records.length ? 'void' : 'empty'; return active.status; }
+
+function checkPrereqAmbiente(pavId, ambiente, prServId){
+  const prServ = getServ(prServId);
+  if(!prServ) return {ok:true};
+  for(const it of prServ.itens){
+    const records = cellRecords(pavId, prServId, ambiente, it);
+    const active = activeRecord(records);
+    if(!active) return {ok:false, motivo:`${it} não preenchido`};
+    if(active.pendenciaImpeditiva) return {ok:false, motivo:`${it}: pendência impeditiva aberta`};
+    if(active.status !== 'ok') return {ok:false, motivo:`${it}: ${STATUS[active.status].label.toLowerCase()}`};
+  }
+  return {ok:true};
+}
+function liberacaoServico(pavId, ambiente, servId){
+  const serv = getServ(servId);
+  if(!serv || !serv.prereqs || !serv.prereqs.length) return {estado:'liberado'};
+  for(const pr of serv.prereqs){
+    const prServ = getServ(pr.servId);
+    const r = checkPrereqAmbiente(pavId, ambiente, pr.servId);
+    if(!r.ok){
+      if(pr.tipo === 'obrigatoria') return {estado:'bloqueado', servico:prServ.nome, motivo:r.motivo};
+      if(pr.tipo === 'condicional') return {estado:'alerta', servico:prServ.nome, motivo:r.motivo};
+    }
+  }
+  return {estado:'liberado'};
+}
+function getDependents(servId){ return DB.servicos.filter(s => (s.prereqs||[]).some(p=>p.servId===servId)); }
+
+/* ---------------- WIZARD RENDER ---------------- */
+function renderDiscRow(){
+  const wrap = document.getElementById('discRow'); wrap.innerHTML = '';
+  [['instalacoes','🔧 Instalações','inst'],['civil','🧱 Civil','civ']].forEach(([id,label,cls])=>{
+    const b = document.createElement('button');
+    b.className = 'disc-btn' + (state.disciplina===id ? ' active '+cls : '');
+    b.textContent = label;
+    b.onclick = ()=>{
+      state.disciplina = id; state.tipoServico = null; state.servId = pickDefaultServId();
+      renderAll();
+    };
+    wrap.appendChild(b);
+  });
+}
+function renderGrupoRow(){
+  const wrap = document.getElementById('grupoRow'); wrap.innerHTML = '';
+  REAL_DATA.grupos_order.forEach(g=>{
+    const b = document.createElement('button');
+    b.className = 'gchip' + (state.grupo===g ? ' active':'');
+    b.textContent = g;
+    b.onclick = ()=>{
+      state.grupo = g;
+      const list = pavsInGrupo(g);
+      state.pavId = list[0].id; state.coluna = null; state.ambienteFiltro = null;
+      renderAll();
+    };
+    wrap.appendChild(b);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'gchip add'; addBtn.textContent = '+ Novo local';
+  addBtn.onclick = openAddLocal;
+  wrap.appendChild(addBtn);
+}
+function renderPavTabs(){
+  const wrap = document.getElementById('pavTabs'); wrap.innerHTML = '';
+  pavsInGrupo(state.grupo).forEach(p=>{
+    const b = document.createElement('button');
+    b.className = 'chip' + (p.id===state.pavId ? ' active':'');
+    b.innerHTML = p.nome + (p.custom ? ' <span class="custom-badge">novo</span>' : '');
+    b.onclick = ()=>{ state.pavId = p.id; state.coluna = null; state.ambienteFiltro = null; renderAll(); };
+    wrap.appendChild(b);
+  });
+}
+function renderColunaBlock(){
+  const pav = getPav(state.pavId);
+  const block = document.getElementById('colunaBlock');
+  if(pav.grupo !== TORRE_GRUPO || !pav.colunas.length){ block.style.display='none'; return; }
+  block.style.display = 'block';
+  const wrap = document.getElementById('colunaRow'); wrap.innerHTML = '';
+  const todos = document.createElement('button');
+  todos.className = 'chip' + (state.coluna===null ? ' active':'');
+  todos.textContent = 'Todas';
+  todos.onclick = ()=>{ state.coluna = null; state.ambienteFiltro=null; renderAll(); };
+  wrap.appendChild(todos);
+  pav.colunas.forEach(c=>{
+    const num = pav.andar*100+parseInt(c,10);
+    const b = document.createElement('button');
+    b.className = 'chip' + (state.coluna===c ? ' active':'');
+    b.textContent = `C${c} (Apto ${num})`;
+    b.onclick = ()=>{ state.coluna = c; state.ambienteFiltro=null; renderAll(); };
+    wrap.appendChild(b);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'chip add'; addBtn.textContent = '+ Nova coluna';
+  addBtn.onclick = openAddColuna;
+  wrap.appendChild(addBtn);
+}
+function renderAmbienteRow(){
+  const pav = getPav(state.pavId);
+  const wrap = document.getElementById('ambienteRow'); wrap.innerHTML = '';
+  const todos = document.createElement('button');
+  todos.className = 'chip' + (state.ambienteFiltro===null ? ' active':'');
+  todos.textContent = 'Todos';
+  todos.onclick = ()=>{ state.ambienteFiltro = null; renderAll(); };
+  wrap.appendChild(todos);
+  roomTypesDoPav(pav).forEach(a=>{
+    const b = document.createElement('button');
+    b.className = 'chip' + (state.ambienteFiltro===a ? ' active':'');
+    b.textContent = a;
+    b.onclick = ()=>{ state.ambienteFiltro = a; renderAll(); };
+    wrap.appendChild(b);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'chip add'; addBtn.textContent = '+ Novo ambiente';
+  addBtn.onclick = openAddAmbiente;
+  wrap.appendChild(addBtn);
+}
+function renderTipoServicoRow(){
+  const wrap = document.getElementById('tipoServicoRow'); wrap.innerHTML = '';
+  const todos = document.createElement('button');
+  todos.className = 'gchip' + (state.tipoServico===null ? ' active':'');
+  todos.textContent = 'Todos';
+  todos.onclick = ()=>{ state.tipoServico = null; state.servId = pickDefaultServId(); renderAll(); };
+  wrap.appendChild(todos);
+  tiposServicoDaDisciplina().forEach(ts=>{
+    const b = document.createElement('button');
+    b.className = 'gchip' + (state.tipoServico===ts ? ' active':'');
+    b.textContent = ts;
+    b.onclick = ()=>{ state.tipoServico = ts; state.servId = pickDefaultServId(); renderAll(); };
+    wrap.appendChild(b);
+  });
+}
+function renderServiceTabs(){
+  const wrap = document.getElementById('serviceTabs'); wrap.innerHTML = '';
+  const list = servicosFiltrados();
+  if(!state.servId || !list.find(s=>s.id===state.servId)) state.servId = list.length ? list[0].id : null;
+  list.forEach(s=>{
+    const b = document.createElement('button');
+    b.className = 'chip' + (s.id===state.servId ? ' active':'');
+    b.innerHTML = s.nome + (s.prereqs && s.prereqs.length ? ' 🔗' : '') + (s.custom ? ' <span class="custom-badge">novo</span>' : '');
+    b.onclick = ()=>{ state.servId = s.id; renderAll(); };
+    wrap.appendChild(b);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'chip add'; addBtn.textContent = '+ Novo pacote';
+  addBtn.onclick = openAddPacote;
+  wrap.appendChild(addBtn);
+}
+function renderPrereqRow(){
+  const wrap = document.getElementById('prereqRow');
+  const serv = getServ(state.servId);
+  if(!serv || !serv.prereqs || !serv.prereqs.length){ wrap.innerHTML=''; return; }
+  wrap.innerHTML = '🔗 Pré-requisitos: ' + serv.prereqs.map(pr=>{
+    const prServ = getServ(pr.servId);
+    return prServ ? `<span class="prereq-chip tipo-${pr.tipo}">${prServ.nome} · ${TIPO_LABEL[pr.tipo]}</span>` : '';
+  }).join('');
+}
+function renderPrevistoBadge(){
+  const wrap = document.getElementById('previstoBadgeWrap');
+  const data = state.servId ? (REAL_DATA.previsto[state.pavId] || {})[state.servId] : null;
+  wrap.innerHTML = data ? `<span class="previsto-badge">📅 Previsto no cronograma: ${data}</span>` : '';
+}
+function renderViewToggle(){
+  document.querySelectorAll('.vt-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.view===state.view));
+  document.getElementById('matrizView').style.display = state.view==='matriz' ? 'block':'none';
+  document.getElementById('loteView').style.display = state.view==='lote' ? 'block':'none';
+  document.getElementById('searchWrap').style.display = state.view==='matriz' ? 'block':'none';
+}
+
+/* ---------------- MATRIX ---------------- */
+function renderMatrix(){
+  const pav = getPav(state.pavId); const serv = getServ(state.servId);
+  if(!serv){ document.getElementById('panelTitle').textContent = 'Nenhum pacote nesse filtro'; document.getElementById('matrixTable').innerHTML=''; document.getElementById('emptyState').style.display='none'; return; }
+  document.getElementById('panelTitle').textContent = pav.nome + ' · ' + serv.nome;
+  document.getElementById('placeholderNote').style.display = (pav.grupo!==TORRE_GRUPO && pav.ambientes.length===1 && pav.ambientes[0].includes('a detalhar')) ? 'block' : 'none';
+
+  const table = document.getElementById('matrixTable');
+  const emptyState = document.getElementById('emptyState');
+  const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+  let ambientes = ambientesFiltrados();
+  if(query) ambientes = ambientes.filter(a => a.toLowerCase().includes(query) || serv.itens.some(it => it.toLowerCase().includes(query)));
+
+  if(ambientes.length===0){
+    table.style.display = 'none'; emptyState.style.display = 'block';
+    emptyState.innerHTML = `<div class="empty-state"><span class="glyph">⬜</span>Nenhum ambiente para esse filtro.</div>`;
+    document.getElementById('panelMeta').textContent = '0 ambientes';
+    return;
+  }
+  table.style.display = 'table'; emptyState.style.display = 'none';
+  document.getElementById('panelMeta').textContent = ambientes.length + ' ambientes · ' + serv.itens.length + ' itens';
+
+  let thead = '<thead><tr><th>Ambiente</th>' + serv.itens.map(it=>`<th>${it}</th>`).join('') + '</tr></thead>';
+  let tbody = '<tbody>' + ambientes.map(amb=>{
+    const gate = liberacaoServico(pav.id, amb, serv.id);
+    const rowClass = gate.estado==='bloqueado' ? 'row-blocked' : gate.estado==='alerta' ? 'row-alert' : '';
+    const gateIcon = gate.estado==='bloqueado' ? `<span class="gate-icon" title="Bloqueado: ${gate.motivo}">🔒</span>` :
+                     gate.estado==='alerta' ? `<span class="gate-icon" title="Alerta: ${gate.motivo}">⚠️</span>` : '';
+    let cells = serv.itens.map(item=>{
+      const records = cellRecords(pav.id, serv.id, amb, item);
+      const cls = cellDotClass(records); const count = records.length;
+      return `<td><button class="cell" data-amb="${encodeURIComponent(amb)}" data-item="${encodeURIComponent(item)}">
+        <span class="dot ${cls}"></span>${count>1 ? `<span class="badge-count">${count}</span>`:''}
+      </button></td>`;
+    }).join('');
+    return `<tr class="${rowClass}"><th>${gateIcon}${amb}</th>${cells}</tr>`;
+  }).join('') + '</tbody>';
+  table.innerHTML = thead + tbody;
+  table.querySelectorAll('.cell').forEach(btn=>{
+    btn.addEventListener('click', ()=>openSheet(decodeURIComponent(btn.dataset.amb), decodeURIComponent(btn.dataset.item)));
+  });
+}
+
+/* ---------------- LOTE ---------------- */
+function renderLote(){
+  const pav = getPav(state.pavId); const serv = getServ(state.servId);
+  if(!serv) return;
+  document.getElementById('loteServName').textContent = serv.nome + ' · ' + pav.nome;
+  const list = document.getElementById('loteList'); list.innerHTML = '';
+  ambientesFiltrados().forEach(amb=>{
+    const gate = liberacaoServico(pav.id, amb, serv.id);
+    const row = document.createElement('label');
+    row.className = 'lote-item' + (gate.estado==='bloqueado' ? ' blocked' : gate.estado==='alerta' ? ' alert':'');
+    const checked = state.lote.selected.has(amb);
+    row.innerHTML = `<input type="checkbox" data-amb="${encodeURIComponent(amb)}" ${checked?'checked':''} ${gate.estado==='bloqueado'?'disabled':''}>
+      <span class="li-name">${amb}${gate.estado!=='liberado' ? `<span class="li-motivo">${gate.servico} — ${gate.motivo}</span>` : ''}</span>
+      <span class="li-status ${gate.estado==='bloqueado'?'blocked':gate.estado==='alerta'?'alert':'ok'}">
+        ${gate.estado==='bloqueado' ? '🔒 Bloqueado' : gate.estado==='alerta' ? '⚠️ Alerta' : '🟢 Liberado'}</span>`;
+    row.querySelector('input').addEventListener('change', (e)=>{
+      if(e.target.checked) state.lote.selected.add(amb); else state.lote.selected.delete(amb);
+      updateLoteCount();
+    });
+    list.appendChild(row);
+  });
+  updateLoteCount();
+}
+function updateLoteCount(){
+  document.getElementById('loteCount').textContent = state.lote.selected.size;
+  document.getElementById('loteSave').disabled = !(state.lote.selected.size>0 && state.loteStatus && document.getElementById('loteResponsavel').value.trim());
+}
+function renderLoteStatusGrid(){
+  const grid = document.getElementById('loteStatusGrid'); grid.innerHTML = '';
+  Object.keys(STATUS).filter(k=>k!=='empty').forEach(key=>{
+    const s = STATUS[key];
+    const opt = document.createElement('button');
+    opt.className = 'status-opt'; opt.type = 'button';
+    opt.innerHTML = `<span class="dot" style="background:${s.color}"></span>${s.label}`;
+    opt.onclick = ()=>{ state.loteStatus = key; grid.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('selected')); opt.classList.add('selected'); updateLoteCount(); };
+    grid.appendChild(opt);
+  });
+}
+document.getElementById('loteResponsavel').addEventListener('input', updateLoteCount);
+document.getElementById('loteSelAll').addEventListener('click', ()=>{
+  const pav = getPav(state.pavId), serv = getServ(state.servId);
+  ambientesFiltrados().forEach(amb=>{ const gate = liberacaoServico(pav.id, amb, serv.id); if(gate.estado!=='bloqueado') state.lote.selected.add(amb); });
+  renderLote();
+});
+document.getElementById('loteSelNone').addEventListener('click', ()=>{ state.lote.selected.clear(); renderLote(); });
+document.getElementById('loteSave').addEventListener('click', ()=>{
+  const pav = getPav(state.pavId), serv = getServ(state.servId);
+  const {data, hora} = nowParts(); const responsavel = document.getElementById('loteResponsavel').value.trim();
+  const results = [];
+  state.lote.selected.forEach(amb=>{
+    const gate = liberacaoServico(pav.id, amb, serv.id);
+    if(gate.estado==='bloqueado'){ results.push({amb, ok:false, motivo:`ignorado — bloqueado por ${gate.servico} (${gate.motivo})`}); return; }
+    serv.itens.forEach(item=>{
+      const records = ensurePath(pav.id, serv.id, amb, item);
+      const prevActive = activeRecord(records);
+      if(prevActive){ prevActive.void = true; prevActive.invalidadoPor = responsavel; prevActive.dataInvalidacao = data; prevActive.horaInvalidacao = hora; prevActive.motivoInvalidacao = 'Reaberto via registro em lote'; }
+      records.push({status:state.loteStatus, responsavel, data, hora});
+    });
+    results.push({amb, ok:true, motivo: gate.estado==='alerta' ? `registrado com alerta (${gate.servico} pendente)` : 'registrado'});
+  });
+  saveData();
+  document.getElementById('loteResult').innerHTML = results.map(r=>`<div class="lr-line">${r.ok?'🟢':'🔒'} <b>${r.amb}</b> — ${r.motivo}</div>`).join('');
+  state.lote.selected.clear(); state.loteStatus = null;
+  document.getElementById('loteResponsavel').value = '';
+  document.querySelectorAll('#loteStatusGrid .status-opt').forEach(o=>o.classList.remove('selected'));
+  renderLote(); renderMatrix();
+});
+
+function renderAll(){
+  renderDiscRow(); renderGrupoRow(); renderPavTabs(); renderColunaBlock(); renderAmbienteRow();
+  renderTipoServicoRow(); renderServiceTabs(); renderPrereqRow(); renderPrevistoBadge();
+  renderViewToggle(); renderMatrix(); renderLoteStatusGrid(); renderLote();
+}
+document.querySelectorAll('.vt-btn').forEach(btn=>btn.addEventListener('click', ()=>{ state.view = btn.dataset.view; renderAll(); }));
+
+/* ---------------- FICHA (modal) ---------------- */
+function openSheet(ambiente, item){
+  state.cell = {ambiente, item}; state.selectedStatus = null;
+  const pav = getPav(state.pavId), serv = getServ(state.servId);
+  document.getElementById('sheetPath').textContent = `${pav.nome} · ${ambiente} · ${serv.nome}`;
+  document.getElementById('sheetTitle').textContent = item;
+  state.gating = liberacaoServico(pav.id, ambiente, serv.id);
+  renderGateBanner(); renderTrail(); renderStatusGrid(); renderDeps(pav.id, ambiente);
+  document.getElementById('fResponsavel').value=''; document.getElementById('fMotivo').value='';
+  document.getElementById('fPendencia').checked=false;
+  document.getElementById('reasonWrap').classList.remove('show');
+  document.getElementById('saveRecord').disabled = true;
+  document.getElementById('newRecordBox').classList.toggle('locked', state.gating.estado==='bloqueado');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeSheet(){ document.getElementById('overlay').classList.remove('show'); }
+function renderGateBanner(){
+  const wrap = document.getElementById('gateBanner'); const g = state.gating;
+  if(g.estado==='bloqueado') wrap.innerHTML = `<div class="gate-banner blocked"><span class="gi">🔴</span><div><b>Bloqueado</b> — pré-requisito: ${g.servico}<br>${g.motivo}</div></div>`;
+  else if(g.estado==='alerta') wrap.innerHTML = `<div class="gate-banner alert"><span class="gi">⚠️</span><div><b>Alerta</b> — pré-requisito condicional: ${g.servico}<br>${g.motivo}. Pode preencher, mas exige justificativa.</div></div>`;
+  else wrap.innerHTML = '';
+}
+function renderTrail(){
+  const {ambiente, item} = state.cell;
+  const records = cellRecords(state.pavId, state.servId, ambiente, item);
+  const trail = document.getElementById('trail');
+  if(records.length===0){ trail.innerHTML = `<div class="record" style="--dotcolor:var(--st-empty)"><div class="record-title">Nenhuma verificação registrada ainda</div><div class="record-meta">Preencha o primeiro registro abaixo.</div></div>`; return; }
+  trail.innerHTML = records.map(r=>{
+    const st = STATUS[r.status];
+    let html = `<div class="record ${r.void?'is-void':''}" style="--dotcolor:${r.void?'var(--st-void)':st.color}">
+      <div class="record-top"><span class="record-title">${st.label}</span>
+      <span class="status-pill" style="background:${r.void?'var(--st-void)':st.pill}">${r.void?'Invalidado':st.label}</span></div>
+      <div class="record-meta">Responsável: ${r.responsavel} · ${r.data} às ${r.hora}</div>
+      ${r.motivo ? `<div class="record-reason">${r.motivo}</div>` : ''}
+      ${r.pendenciaImpeditiva ? `<div class="record-pendencia">🔴 Pendência impeditiva aberta — bloqueia pacotes que dependem deste item</div>` : ''}`;
+    if(r.void) html += `<div class="record-reason">Registro invalidado por ${r.invalidadoPor} em ${r.dataInvalidacao} às ${r.horaInvalidacao}${r.motivoInvalidacao ? ' — '+r.motivoInvalidacao : ''}</div>`;
+    html += `</div>`; return html;
+  }).join('');
+}
+function renderDeps(pavId, ambiente){
+  const deps = getDependents(state.servId); const wrap = document.getElementById('depsWrap'); const list = document.getElementById('depsList');
+  if(!deps.length){ wrap.style.display='none'; return; }
+  wrap.style.display = 'block';
+  list.innerHTML = deps.map(d=>{
+    const g = liberacaoServico(pavId, ambiente, d.id);
+    const cls = g.estado==='bloqueado' ? 'blocked' : g.estado==='alerta' ? 'alert' : 'ok';
+    const icon = g.estado==='bloqueado' ? '🔒' : g.estado==='alerta' ? '⚠️' : '🟢';
+    return `<span class="dep-chip ${cls}">${icon} ${d.nome}</span>`;
+  }).join('');
+}
+function renderStatusGrid(){
+  const grid = document.getElementById('statusGrid'); grid.innerHTML = '';
+  Object.keys(STATUS).filter(k=>k!=='empty').forEach(key=>{
+    const s = STATUS[key];
+    const opt = document.createElement('button'); opt.className = 'status-opt'; opt.type = 'button';
+    opt.innerHTML = `<span class="dot" style="background:${s.color}"></span>${s.label}`;
+    opt.onclick = ()=>{
+      state.selectedStatus = key;
+      grid.querySelectorAll('.status-opt').forEach(o=>o.classList.remove('selected')); opt.classList.add('selected');
+      const reasonWrap = document.getElementById('reasonWrap');
+      const records = cellRecords(state.pavId, state.servId, state.cell.ambiente, state.cell.item);
+      const hasActive = !!activeRecord(records);
+      const needsJustificativa = state.gating.estado==='alerta';
+      document.getElementById('reasonLabel').textContent = needsJustificativa ? 'Justificativa obrigatória (liberado com alerta)' : 'Motivo (reabertura / invalidação)';
+      reasonWrap.classList.toggle('show', hasActive || key==='reopen' || key==='fail' || needsJustificativa);
+      validateForm();
+    };
+    grid.appendChild(opt);
+  });
+}
+function validateForm(){
+  const resp = document.getElementById('fResponsavel').value.trim();
+  const needsJustificativa = state.gating.estado==='alerta';
+  const motivo = document.getElementById('fMotivo').value.trim();
+  const blocked = state.gating.estado==='bloqueado';
+  document.getElementById('saveRecord').disabled = !(state.selectedStatus && resp && !blocked && (!needsJustificativa || motivo));
+}
+document.getElementById('fResponsavel').addEventListener('input', validateForm);
+document.getElementById('fMotivo').addEventListener('input', validateForm);
+function pad(n){ return n.toString().padStart(2,'0'); }
+function nowParts(){ const d = new Date(); return { data: `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`, hora: `${pad(d.getHours())}:${pad(d.getMinutes())}` }; }
+document.getElementById('saveRecord').addEventListener('click', ()=>{
+  if(state.gating.estado==='bloqueado') return;
+  const {ambiente, item} = state.cell;
+  const records = ensurePath(state.pavId, state.servId, ambiente, item);
+  const responsavel = document.getElementById('fResponsavel').value.trim();
+  const motivo = document.getElementById('fMotivo').value.trim();
+  const pendencia = document.getElementById('fPendencia').checked;
+  const {data, hora} = nowParts();
+  const prevActive = activeRecord(records);
+  if(prevActive){ prevActive.void = true; prevActive.invalidadoPor = responsavel; prevActive.dataInvalidacao = data; prevActive.horaInvalidacao = hora; prevActive.motivoInvalidacao = motivo || 'Reaberto para nova verificação'; }
+  records.push({ status: state.selectedStatus, responsavel, data, hora,
+    motivo: (state.selectedStatus==='fail' || state.selectedStatus==='reopen' || state.gating.estado==='alerta') ? motivo : '',
+    pendenciaImpeditiva: pendencia });
+  saveData();
+  state.gating = liberacaoServico(state.pavId, ambiente, getServ(state.servId).id);
+  renderGateBanner(); renderTrail(); renderDeps(state.pavId, ambiente); renderMatrix(); renderLote();
+  state.selectedStatus = null;
+  document.getElementById('fResponsavel').value=''; document.getElementById('fMotivo').value=''; document.getElementById('fPendencia').checked=false;
+  document.querySelectorAll('#statusGrid .status-opt').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('reasonWrap').classList.remove('show'); document.getElementById('saveRecord').disabled = true;
+  document.getElementById('newRecordBox').classList.toggle('locked', state.gating.estado==='bloqueado');
+});
+document.getElementById('closeSheet').addEventListener('click', closeSheet);
+document.getElementById('overlay').addEventListener('click', (e)=>{ if(e.target.id==='overlay') closeSheet(); });
+document.getElementById('searchInput').addEventListener('input', renderMatrix);
+
+/* ---------------- ADICIONAR (local / coluna / ambiente / pacote) ---------------- */
+function openAdd(title, path, bodyHtml, onSave){
+  document.getElementById('addTitle').textContent = title;
+  document.getElementById('addPath').textContent = path;
+  document.getElementById('addBody').innerHTML = bodyHtml;
+  document.getElementById('addOverlay').classList.add('show');
+  document.getElementById('addSaveBtn').onclick = onSave;
+}
+function closeAdd(){ document.getElementById('addOverlay').classList.remove('show'); }
+document.getElementById('closeAdd').addEventListener('click', closeAdd);
+document.getElementById('addOverlay').addEventListener('click', (e)=>{ if(e.target.id==='addOverlay') closeAdd(); });
+
+function openAddLocal(){
+  const gruposOpts = REAL_DATA.grupos_order.map(g=>`<option value="${g}" ${g===state.grupo?'selected':''}>${g}</option>`).join('');
+  const body = `
+    <div class="field"><label>Nome do local</label><input id="newLocalNome" placeholder="Ex.: 17º Pav. - Ático"></div>
+    <div class="field"><label>Grupo</label><select id="newLocalGrupo">${gruposOpts}</select></div>
+    <label class="checkfield" style="color:var(--teal-800)"><input type="checkbox" id="newLocalTorre"> É um pavimento-tipo com colunas (apartamentos)?</label>
+    <div class="field" id="newLocalColunasWrap" style="display:none">
+      <label>Colunas (separadas por vírgula, ex.: 01,02,03)</label><input id="newLocalColunas" placeholder="01,02,03,04">
+      <label style="margin-top:8px">Número do andar (pra numerar os aptos)</label><input id="newLocalAndar" type="number" placeholder="17">
+    </div>
+    <button class="btn-primary" id="addSaveBtn">Adicionar local</button>`;
+  openAdd('Novo local', 'Local', body, ()=>{
+    const nome = document.getElementById('newLocalNome').value.trim();
+    if(!nome) return;
+    const grupo = document.getElementById('newLocalGrupo').value;
+    const isTorre = document.getElementById('newLocalTorre').checked;
+    let id = slugify(nome); let base=id, n=1; while(getPav(id)){ id = base+'-'+(n++); }
+    let pav;
+    if(isTorre){
+      const cols = document.getElementById('newLocalColunas').value.split(',').map(s=>s.trim()).filter(Boolean);
+      const andar = parseInt(document.getElementById('newLocalAndar').value,10) || 0;
+      pav = {id, nome, grupo, andar, colunas:cols, baseAmbientes:['Sala','Quarto 01','Quarto 02','Cozinha'], ambientes:[], custom:true};
+    } else {
+      pav = {id, nome, grupo, andar:null, colunas:[], baseAmbientes:[], ambientes:['Área Geral (a detalhar)'], custom:true};
+    }
+    DB.pavimentos.push(pav);
+    saveData();
+    state.grupo = grupo; state.pavId = id; state.coluna=null; state.ambienteFiltro=null;
+    closeAdd(); renderAll();
+  });
+  document.getElementById('newLocalTorre').addEventListener('change', (e)=>{
+    document.getElementById('newLocalColunasWrap').style.display = e.target.checked ? 'block':'none';
+  });
+}
+function openAddColuna(){
+  const pav = getPav(state.pavId);
+  const body = `<div class="field"><label>Número da coluna (ex.: 08)</label><input id="newColunaNum" placeholder="08"></div>
+    <button class="btn-primary" id="addSaveBtn">Adicionar coluna</button>`;
+  openAdd('Nova coluna', pav.nome, body, ()=>{
+    const num = document.getElementById('newColunaNum').value.trim();
+    if(!num || pav.colunas.includes(num)) return;
+    pav.colunas.push(num); pav.colunas.sort();
+    saveData(); closeAdd(); renderAll();
+  });
+}
+function openAddAmbiente(){
+  const pav = getPav(state.pavId);
+  const label = pav.grupo===TORRE_GRUPO ? 'Nome do ambiente (ex.: Varanda) — vale pra todas as unidades desse pavimento' : 'Nome do ambiente/área';
+  const body = `<div class="field"><label>${label}</label><input id="newAmbienteNome" placeholder="Ex.: Varanda"></div>
+    <button class="btn-primary" id="addSaveBtn">Adicionar ambiente</button>`;
+  openAdd('Novo ambiente', pav.nome, body, ()=>{
+    const nome = document.getElementById('newAmbienteNome').value.trim();
+    if(!nome) return;
+    if(pav.grupo===TORRE_GRUPO){
+      if(!pav.baseAmbientes.includes(nome)) pav.baseAmbientes.push(nome);
+    } else {
+      pav.ambientes = pav.ambientes.filter(a=>!a.includes('a detalhar'));
+      if(!pav.ambientes.includes(nome)) pav.ambientes.push(nome);
+    }
+    saveData(); closeAdd(); renderAll();
+  });
+}
+function openAddPacote(){
+  const areaOpts = ['instalacoes','civil'].map(a=>`<option value="${a}" ${a===state.disciplina?'selected':''}>${a==='instalacoes'?'Instalações':'Civil'}</option>`).join('');
+  const tsOpts = tiposServicoDaDisciplina().map(t=>`<option value="${t}">${t}</option>`).join('');
+  const prereqOpts = servicosDaDisciplina().map(s=>`<option value="${s.id}">${s.nome}</option>`).join('');
+  const body = `
+    <div class="field"><label>Nome do pacote/serviço</label><input id="newPacoteNome" placeholder="Ex.: Instalação de Persianas"></div>
+    <div class="field"><label>Disciplina</label><select id="newPacoteArea">${areaOpts}</select></div>
+    <div class="field"><label>Tipo de serviço</label><input id="newPacoteTipo" list="tsList" placeholder="Ex.: Esquadrias"><datalist id="tsList">${tsOpts}</datalist></div>
+    <div class="field"><label>Itens de verificação (separados por vírgula)</label><input id="newPacoteItens" placeholder="Ex.: Fixação, Alinhamento, Acionamento"></div>
+    <div class="field"><label>Pré-requisito obrigatório (opcional)</label><select id="newPacotePrereq"><option value="">Nenhum</option>${prereqOpts}</select></div>
+    <button class="btn-primary" id="addSaveBtn">Adicionar pacote</button>`;
+  openAdd('Novo pacote', 'Pacote', body, ()=>{
+    const nome = document.getElementById('newPacoteNome').value.trim();
+    if(!nome) return;
+    const area = document.getElementById('newPacoteArea').value;
+    const tipoServico = document.getElementById('newPacoteTipo').value.trim() || 'Outros';
+    const itens = document.getElementById('newPacoteItens').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const prereqId = document.getElementById('newPacotePrereq').value;
+    let id = slugify(nome); let base=id, n=1; while(getServ(id)){ id = base+'-'+(n++); }
+    const serv = {id, nome, area, tipoServico, itens: itens.length?itens:['Execução'], custom:true};
+    if(prereqId) serv.prereqs = [{servId:prereqId, tipo:'obrigatoria'}];
+    DB.servicos.push(serv);
+    saveData();
+    state.disciplina = area; state.tipoServico = tipoServico; state.servId = id;
+    closeAdd(); renderAll();
+  });
+}
+
+renderAll();
+
+</script>
+</body>
+</html>
